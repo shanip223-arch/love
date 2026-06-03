@@ -1,242 +1,309 @@
+```html
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Love Universe ❤️</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love Universe — A Premium Interactive Cinematic Cosmos</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Syne & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Syne:wght@500;700;800&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        syne: ['Syne', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        universe: {
+                            deep: '#030008',
+                            neonPink: '#ff2e93',
+                            neonRed: '#ff003c',
+                            neonPurple: '#9d00ff',
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Premium Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #030008;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #ff003c, #9d00ff);
+            border-radius: 3px;
+        }
+        
+        /* Glassmorphism Styles */
+        .glass-panel {
+            background: rgba(10, 5, 18, 0.45);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
 
-<style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
+        .glass-panel-interactive {
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .glass-panel-interactive:hover {
+            background: rgba(255, 46, 147, 0.08);
+            border-color: rgba(255, 46, 147, 0.3);
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 12px 40px rgba(255, 0, 60, 0.15);
+        }
 
-body{
-background:#050505;
-color:white;
-overflow-x:hidden;
-min-height:100vh;
-}
+        /* Ambient Glow Shadows */
+        .neon-glow-pink {
+            text-shadow: 0 0 15px rgba(255, 46, 147, 0.6), 0 0 30px rgba(255, 46, 147, 0.3);
+        }
+        .neon-glow-purple {
+            text-shadow: 0 0 15px rgba(157, 0, 255, 0.6);
+        }
+        
+        /* Base styles */
+        body {
+            background-color: #030008;
+            color: #f3f4f6;
+            overflow-x: hidden;
+        }
+        
+        /* 3D Card Float Effect */
+        .card-container {
+            perspective: 1000px;
+        }
 
-#hearts{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-pointer-events:none;
-z-index:-1;
-}
-
-.hero{
-text-align:center;
-padding:80px 20px;
-}
-
-.hero h1{
-font-size:3rem;
-color:#ff3366;
-text-shadow:0 0 20px #ff3366;
-animation:pulse 2s infinite;
-}
-
-.hero p{
-margin-top:15px;
-opacity:.8;
-}
-
-@keyframes pulse{
-50%{
-transform:scale(1.05);
-}
-}
-
-.card{
-width:95%;
-max-width:900px;
-margin:20px auto;
-padding:20px;
-border-radius:20px;
-background:rgba(255,255,255,.05);
-backdrop-filter:blur(10px);
-border:1px solid rgba(255,255,255,.1);
-}
-
-input,textarea{
-width:100%;
-padding:12px;
-margin-top:10px;
-border:none;
-border-radius:10px;
-background:#111;
-color:white;
-}
-
-button{
-padding:12px 20px;
-border:none;
-border-radius:10px;
-background:#ff3366;
-color:white;
-cursor:pointer;
-margin-top:10px;
-}
-
-.gallery{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-gap:10px;
-margin-top:20px;
-}
-
-.gallery img,
-.gallery video{
-width:100%;
-border-radius:12px;
-}
-
-.note{
-background:#111;
-padding:10px;
-border-radius:10px;
-margin-top:10px;
-}
-</style>
+        .input-glow:focus {
+            outline: none;
+            border-color: #ff2e93;
+            box-shadow: 0 0 15px rgba(255, 46, 147, 0.4);
+        }
+    </style>
 </head>
-<body>
+<body class="selection:bg-universe-neonPink selection:text-white">
 
-<div id="hearts"></div>
+    <!-- 3D WebGL Canvas Layer -->
+    <div id="canvas-container" class="fixed top-0 left-0 w-full h-full -z-10 pointer-events-none"></div>
 
-<div class="hero">
-<h1>❤️ Love Universe ❤️</h1>
-<p>Store Memories • Photos • Videos • Notes</p>
-</div>
+    <!-- Universal Custom Loader & Intro Shield -->
+    <div id="intro-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#030008] transition-opacity duration-1000">
+        <div class="text-center px-4 max-w-xl">
+            <div class="mb-4 text-xs font-semibold uppercase tracking-[0.4em] text-universe-neonPink neon-glow-pink">Love Universe Init Sequence</div>
+            <h1 class="text-5xl md:text-7xl font-syne font-bold mb-6 tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-pink-200 to-universe-neonPink">
+                LOVE<br>UNIVERSE
+            </h1>
+            <p class="text-gray-400 font-sans text-sm md:text-base leading-relaxed mb-8">
+                Welcome to a luxury digital sanctuary where stellar physics and romantic memories collide in dynamic 3D space.
+            </p>
+            
+            <!-- Progress indicator -->
+            <div class="w-48 h-[2px] bg-white/10 mx-auto rounded-full overflow-hidden mb-8 relative">
+                <div id="progress-bar" class="absolute top-0 left-0 h-full w-0 bg-gradient-to-r from-universe-neonRed to-universe-neonPink transition-all duration-300"></div>
+            </div>
 
-<div class="card">
-<h2>📸 Upload Photos</h2>
-<input type="file" id="photoInput" accept="image/*">
-<div class="gallery" id="photoGallery"></div>
-</div>
+            <!-- Play & Enter Button -->
+            <button id="enter-btn" class="hidden glass-panel px-8 py-3.5 rounded-full text-xs font-bold tracking-[0.2em] uppercase text-white border border-white/20 hover:border-universe-neonPink transition-all duration-300 transform active:scale-95 shadow-lg shadow-universe-neonPink/10">
+                Initiate Quantum Warp
+            </button>
+        </div>
+    </div>
 
-<div class="card">
-<h2>🎥 Upload Videos</h2>
-<input type="file" id="videoInput" accept="video/*">
-<div class="gallery" id="videoGallery"></div>
-</div>
+    <!-- Persistent Immersive Controls -->
+    <div class="fixed top-6 left-6 z-40 flex items-center gap-4">
+        <div class="glass-panel px-4 py-2 rounded-full flex items-center gap-3 text-[10px] font-semibold tracking-wider uppercase text-white/80">
+            <span class="w-2 h-2 rounded-full bg-universe-neonPink animate-pulse"></span>
+            SYSTEM ONLINE
+        </div>
+    </div>
 
-<div class="card">
-<h2>💌 Love Notes</h2>
-<textarea id="noteText" rows="4" placeholder="Write something beautiful..."></textarea>
-<button onclick="saveNote()">Save Note</button>
-<div id="notes"></div>
-</div>
+    <div class="fixed top-6 right-6 z-40 flex items-center gap-3">
+        <!-- Sound Synthesizer toggle -->
+        <button id="synth-sound-toggle" class="glass-panel p-3.5 rounded-full hover:border-universe-neonPink/50 transition-colors duration-300 text-white flex items-center justify-center" aria-label="Toggle Sound">
+            <svg id="sound-icon-on" class="w-4 h-4 text-universe-neonPink" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z" />
+            </svg>
+            <svg id="sound-icon-off" class="w-4 h-4 text-gray-500 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 9.75L19.5 12m0 0l2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75" />
+            </svg>
+        </button>
+    </div>
 
-<script>
+    <!-- Main Panoramic Content Layout -->
+    <main class="relative z-10 w-full">
 
-// floating hearts
-for(let i=0;i<40;i++){
-let heart=document.createElement('div');
-heart.innerHTML='❤️';
-heart.style.position='absolute';
-heart.style.left=Math.random()*100+'%';
-heart.style.top=Math.random()*100+'%';
-heart.style.opacity=Math.random();
-heart.style.fontSize=(10+Math.random()*30)+'px';
-document.getElementById('hearts').appendChild(heart);
-}
+        <!-- SECTION 1: HERO -->
+        <section id="hero" class="min-h-screen flex flex-col justify-between px-6 py-20 md:px-24">
+            <div></div> <!-- Spacer -->
+            
+            <div class="max-w-4xl space-y-6">
+                <div class="text-xs font-semibold uppercase tracking-[0.5em] text-universe-neonPink neon-glow-pink">Core Coordinate Layer 01</div>
+                <h2 id="hero-title" class="text-6xl md:text-8xl font-syne font-extrabold leading-[0.9] tracking-tighter uppercase">
+                    Love <br>
+                    <span class="bg-clip-text text-transparent bg-gradient-to-r from-universe-neonPink via-universe-neonRed to-universe-neonPurple">Universe</span>
+                </h2>
+                <p id="hero-desc" class="max-w-lg font-sans text-gray-400 text-sm md:text-base leading-relaxed">
+                    Explore a generative, interactive cosmos capturing memories, digital vaults, and cosmic timelines celebrating our infinite universe of love.
+                </p>
+                <div class="flex flex-wrap gap-4 pt-4">
+                    <a href="#memory-universe" class="glass-panel hover:border-universe-neonPink px-8 py-4 rounded-full text-xs font-bold tracking-[0.15em] uppercase text-white transition-all duration-300">
+                        Enter Memory Field
+                    </a>
+                    <button onclick="triggerAmbientChime()" class="bg-gradient-to-r from-universe-neonPink to-universe-neonRed hover:opacity-90 px-8 py-4 rounded-full text-xs font-bold tracking-[0.15em] uppercase text-white transition-all duration-300 shadow-lg shadow-universe-neonPink/20">
+                        Synthesize Love Wave
+                    </button>
+                </div>
+            </div>
 
-// photo upload
-const photoInput=document.getElementById("photoInput");
-const photoGallery=document.getElementById("photoGallery");
+            <!-- Bottom Interactive Guide -->
+            <div class="flex items-center justify-between text-xs text-gray-500 tracking-widest uppercase pt-12 border-t border-white/5">
+                <div>SCROLL TO DEPLOY SPACE-TIME CODES</div>
+                <div class="animate-bounce">↓</div>
+            </div>
+        </section>
 
-photoInput.addEventListener("change",e=>{
-const file=e.target.files[0];
-const reader=new FileReader();
+        <!-- SECTION 2: MEMORY UNIVERSE -->
+        <section id="memory-universe" class="py-32 px-6 md:px-24 relative">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center space-y-4 mb-20">
+                    <div class="text-xs font-semibold uppercase tracking-[0.4em] text-universe-neonPink neon-glow-pink">Interactive Database</div>
+                    <h3 class="text-4xl md:text-6xl font-syne font-bold tracking-tight">Memory Coordinates</h3>
+                    <p class="text-gray-400 max-w-xl mx-auto text-sm md:text-base">
+                        Floating space-time pods preserving beautiful dimensional snapshots of our love journey. Hover to stabilize their rotation.
+                    </p>
+                </div>
 
-reader.onload=function(){
-let photos=JSON.parse(localStorage.getItem("photos")||"[]");
-photos.push(reader.result);
-localStorage.setItem("photos",JSON.stringify(photos));
-loadPhotos();
-}
-reader.readAsDataURL(file);
-});
+                <!-- Memory Floating Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Memory Card 1 -->
+                    <div class="card-container">
+                        <div class="glass-panel glass-panel-interactive p-8 rounded-3xl h-full flex flex-col justify-between space-y-12">
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-universe-neonPink font-mono font-semibold">COORD // 01.03</span>
+                                    <span class="text-xs text-gray-500 font-mono">03 DEC 2024</span>
+                                </div>
+                                <h4 class="text-2xl font-syne font-bold">The Initial Encounter</h4>
+                                <p class="text-sm text-gray-400 leading-relaxed font-sans">
+                                    The exact coordinates in space-time where our gravitational fields first intersected. What started as light banter blossomed into a cosmic singularity of shared dreams.
+                                </p>
+                            </div>
+                            <div class="flex items-center justify-between pt-4 border-t border-white/5">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-universe-neonPink animate-ping"></span>
+                                    <span class="text-[10px] font-semibold tracking-widest text-white/60">SYSTEM LOCKED IN</span>
+                                </div>
+                                <span class="text-2xl text-universe-neonPink">❤️</span>
+                            </div>
+                        </div>
+                    </div>
 
-function loadPhotos(){
-photoGallery.innerHTML="";
-let photos=JSON.parse(localStorage.getItem("photos")||"[]");
+                    <!-- Memory Card 2 -->
+                    <div class="card-container animate-pulse-slow">
+                        <div class="glass-panel glass-panel-interactive p-8 rounded-3xl h-full flex flex-col justify-between space-y-12">
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-universe-neonPink font-mono font-semibold">COORD // 02.14</span>
+                                    <span class="text-xs text-gray-500 font-mono">14 FEB 2025</span>
+                                </div>
+                                <h4 class="text-2xl font-syne font-bold">Midnight City Lights</h4>
+                                <p class="text-sm text-gray-400 leading-relaxed font-sans">
+                                    Dancing on the neon rooftop as the universe dissolved below us. Under a sky full of stardust, we promised to build a universe where only our heartbeats set the tempo.
+                                </p>
+                            </div>
+                            <div class="flex items-center justify-between pt-4 border-t border-white/5">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-universe-neonPink animate-ping"></span>
+                                    <span class="text-[10px] font-semibold tracking-widest text-white/60">DATA CHANNELS ACTIVE</span>
+                                </div>
+                                <span class="text-2xl text-universe-neonPink">✨</span>
+                            </div>
+                        </div>
+                    </div>
 
-photos.forEach(src=>{
-let img=document.createElement("img");
-img.src=src;
-photoGallery.appendChild(img);
-});
-}
+                    <!-- Memory Card 3 -->
+                    <div class="card-container">
+                        <div class="glass-panel glass-panel-interactive p-8 rounded-3xl h-full flex flex-col justify-between space-y-12">
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-universe-neonPink font-mono font-semibold">COORD // 03.11</span>
+                                    <span class="text-xs text-gray-500 font-mono">11 JUN 2025</span>
+                                </div>
+                                <h4 class="text-2xl font-syne font-bold">Oceanic Sunset Warp</h4>
+                                <p class="text-sm text-gray-400 leading-relaxed font-sans">
+                                    The sound of waves mirroring our synchronized breathing. Golden hour sunlight caught your laughter, etching it permanently into the core mainframe of my soul.
+                                </p>
+                            </div>
+                            <div class="flex items-center justify-between pt-4 border-t border-white/5">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-universe-neonPink animate-ping"></span>
+                                    <span class="text-[10px] font-semibold tracking-widest text-white/60">SYNAPSE SECURED</span>
+                                </div>
+                                <span class="text-2xl text-universe-neonPink">🌹</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-loadPhotos();
+        <!-- SECTION 3: VIDEO VAULT -->
+        <section id="video-vault" class="py-32 px-6 md:px-24 bg-gradient-to-b from-transparent via-[#080210] to-transparent">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6">
+                    <div class="space-y-4">
+                        <div class="text-xs font-semibold uppercase tracking-[0.4em] text-universe-neonPink neon-glow-pink">Aesthetic Vault</div>
+                        <h3 class="text-4xl md:text-6xl font-syne font-bold tracking-tight">Cinematic Clips</h3>
+                        <p class="text-gray-400 max-w-lg text-sm md:text-base">
+                            Experience our timeline formatted into beautiful, ambient, interactive audio-visual captures. Select any frame to initiate streaming.
+                        </p>
+                    </div>
+                </div>
 
-// video upload
-const videoInput=document.getElementById("videoInput");
-const videoGallery=document.getElementById("videoGallery");
+                <!-- Netflix-style Slider / Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Clip 1 -->
+                    <div class="group relative cursor-pointer overflow-hidden rounded-2xl glass-panel border border-white/10 hover:border-universe-neonPink/50 transition-all duration-500" onclick="openVideoPlayer('Cosmic Radiance', 'Generating interactive synthesizer spectrum synced with digital cosmos waves.', 'linear-gradient(135deg, #ff0055, #7a00ff)')">
+                        <div class="h-48 w-full bg-gradient-to-tr from-universe-deep via-purple-950/40 to-pink-900/30 relative flex items-center justify-center overflow-hidden">
+                            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,46,147,0.15),transparent)]"></div>
+                            <!-- SVG Play Icon overlay -->
+                            <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+                                <div class="w-14 h-14 rounded-full bg-white/10 group-hover:bg-universe-neonPink group-hover:scale-110 flex items-center justify-center transition-all duration-300 shadow-xl border border-white/20">
+                                    <svg class="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="text-xs font-mono text-universe-neonPink mb-2">01:45 MIN // SPECTRAL</div>
+                            <h4 class="text-lg font-syne font-bold group-hover:text-universe-neonPink transition-colors duration-300">Cosmic Radiance</h4>
+                            <p class="text-xs text-gray-400 mt-2 line-clamp-2">A generative digital visualization representing our combined celestial energy wave signature.</p>
+                        </div>
+                    </div>
 
-videoInput.addEventListener("change",e=>{
-const file=e.target.files[0];
-const reader=new FileReader();
-
-reader.onload=function(){
-let videos=JSON.parse(localStorage.getItem("videos")||"[]");
-videos.push(reader.result);
-localStorage.setItem("videos",JSON.stringify(videos));
-loadVideos();
-}
-reader.readAsDataURL(file);
-});
-
-function loadVideos(){
-videoGallery.innerHTML="";
-let videos=JSON.parse(localStorage.getItem("videos")||"[]");
-
-videos.forEach(src=>{
-let v=document.createElement("video");
-v.src=src;
-v.controls=true;
-videoGallery.appendChild(v);
-});
-}
-
-loadVideos();
-
-// notes
-function saveNote(){
-const text=document.getElementById("noteText").value;
-if(!text) return;
-
-let notes=JSON.parse(localStorage.getItem("notes")||"[]");
-notes.push(text);
-
-localStorage.setItem("notes",JSON.stringify(notes));
-document.getElementById("noteText").value="";
-loadNotes();
-}
-
-function loadNotes(){
-const box=document.getElementById("notes");
-box.innerHTML="";
-
-let notes=JSON.parse(localStorage.getItem("notes")||"[]");
-
-notes.forEach(n=>{
-let div=document.createElement("div");
-div.className="note";
-div.innerText=n;
-box.appendChild(div);
-});
-}
-
-loadNotes();
-
-</script>
-</body>
-</html>
+                    <!-- Clip 2 -->
+                    <div class="group relative cursor-pointer overflow-hidden rounded-2xl glass-panel border border-white/10 hover:border-universe-neonPink/50 transition-all duration-500" onclick="openVideoPlayer('Eternal Resonance', 'Processing frequency channels calibrated to heart synchronicity patterns.', 'linear-gradient(135deg, #00f2fe, #4facfe)')">
+                        <div class="h-48 w-full bg-gradient-to-tr from-universe-deep via-cyan-950/40 to-blue-900/30 relative flex items-center justify-center overflow-hidden">
+                            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(15,124,245,0.15),transparent)]"></div>
+                            <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+                                <div class="w-14 h-14 rounded-full bg-white/10 group-hover:bg-universe-neonPink group-hover:scale-110 flex items-center justify-center transition-all duration-300 shadow-xl border border-white/20">
+                                    <svg class="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="text-xs font-mono text-universe-neonPink mb-2">02:10 MIN // SYNTH</div>
+                            <h4 class="text-lg font-syne font-bold group-hover:text-universe-neonPink transition-color
