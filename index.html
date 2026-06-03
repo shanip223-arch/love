@@ -1,1 +1,63 @@
 
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Love World ❤️</title>
+
+<style>
+body{
+margin:0;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#ff4d6d,#ff758f);
+font-family:Arial,sans-serif;
+overflow:hidden;
+}
+
+h1{
+color:white;
+font-size:3rem;
+text-align:center;
+animation: glow 2s infinite alternate;
+}
+
+@keyframes glow{
+from{ text-shadow:0 0 10px white; }
+to{ text-shadow:0 0 30px white,0 0 50px pink; }
+}
+
+.heart{
+position:absolute;
+color:white;
+font-size:20px;
+animation: float 6s linear infinite;
+}
+
+@keyframes float{
+0%{transform:translateY(100vh);}
+100%{transform:translateY(-100px);}
+}
+</style>
+</head>
+
+<body>
+
+<h1>❤️ Welcome To Love World ❤️</h1>
+
+<script>
+for(let i=0;i<30;i++){
+let heart=document.createElement("div");
+heart.className="heart";
+heart.innerHTML="❤️";
+heart.style.left=Math.random()*100+"vw";
+heart.style.animationDuration=(3+Math.random()*5)+"s";
+document.body.appendChild(heart);
+}
+</script>
+
+</body>
+</html>
