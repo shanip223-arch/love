@@ -1,63 +1,242 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Love World ❤️</title>
+<title>Love Universe ❤️</title>
 
 <style>
-body{
+*{
 margin:0;
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-background:linear-gradient(135deg,#ff4d6d,#ff758f);
+padding:0;
+box-sizing:border-box;
 font-family:Arial,sans-serif;
-overflow:hidden;
 }
 
-h1{
+body{
+background:#050505;
 color:white;
-font-size:3rem;
+overflow-x:hidden;
+min-height:100vh;
+}
+
+#hearts{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+pointer-events:none;
+z-index:-1;
+}
+
+.hero{
 text-align:center;
-animation: glow 2s infinite alternate;
+padding:80px 20px;
 }
 
-@keyframes glow{
-from{ text-shadow:0 0 10px white; }
-to{ text-shadow:0 0 30px white,0 0 50px pink; }
+.hero h1{
+font-size:3rem;
+color:#ff3366;
+text-shadow:0 0 20px #ff3366;
+animation:pulse 2s infinite;
 }
 
-.heart{
-position:absolute;
+.hero p{
+margin-top:15px;
+opacity:.8;
+}
+
+@keyframes pulse{
+50%{
+transform:scale(1.05);
+}
+}
+
+.card{
+width:95%;
+max-width:900px;
+margin:20px auto;
+padding:20px;
+border-radius:20px;
+background:rgba(255,255,255,.05);
+backdrop-filter:blur(10px);
+border:1px solid rgba(255,255,255,.1);
+}
+
+input,textarea{
+width:100%;
+padding:12px;
+margin-top:10px;
+border:none;
+border-radius:10px;
+background:#111;
 color:white;
-font-size:20px;
-animation: float 6s linear infinite;
 }
 
-@keyframes float{
-0%{transform:translateY(100vh);}
-100%{transform:translateY(-100px);}
+button{
+padding:12px 20px;
+border:none;
+border-radius:10px;
+background:#ff3366;
+color:white;
+cursor:pointer;
+margin-top:10px;
+}
+
+.gallery{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+gap:10px;
+margin-top:20px;
+}
+
+.gallery img,
+.gallery video{
+width:100%;
+border-radius:12px;
+}
+
+.note{
+background:#111;
+padding:10px;
+border-radius:10px;
+margin-top:10px;
 }
 </style>
 </head>
-
 <body>
 
-<h1>❤️ Welcome To Love World ❤️</h1>
+<div id="hearts"></div>
+
+<div class="hero">
+<h1>❤️ Love Universe ❤️</h1>
+<p>Store Memories • Photos • Videos • Notes</p>
+</div>
+
+<div class="card">
+<h2>📸 Upload Photos</h2>
+<input type="file" id="photoInput" accept="image/*">
+<div class="gallery" id="photoGallery"></div>
+</div>
+
+<div class="card">
+<h2>🎥 Upload Videos</h2>
+<input type="file" id="videoInput" accept="video/*">
+<div class="gallery" id="videoGallery"></div>
+</div>
+
+<div class="card">
+<h2>💌 Love Notes</h2>
+<textarea id="noteText" rows="4" placeholder="Write something beautiful..."></textarea>
+<button onclick="saveNote()">Save Note</button>
+<div id="notes"></div>
+</div>
 
 <script>
-for(let i=0;i<30;i++){
-let heart=document.createElement("div");
-heart.className="heart";
-heart.innerHTML="❤️";
-heart.style.left=Math.random()*100+"vw";
-heart.style.animationDuration=(3+Math.random()*5)+"s";
-document.body.appendChild(heart);
-}
-</script>
 
+// floating hearts
+for(let i=0;i<40;i++){
+let heart=document.createElement('div');
+heart.innerHTML='❤️';
+heart.style.position='absolute';
+heart.style.left=Math.random()*100+'%';
+heart.style.top=Math.random()*100+'%';
+heart.style.opacity=Math.random();
+heart.style.fontSize=(10+Math.random()*30)+'px';
+document.getElementById('hearts').appendChild(heart);
+}
+
+// photo upload
+const photoInput=document.getElementById("photoInput");
+const photoGallery=document.getElementById("photoGallery");
+
+photoInput.addEventListener("change",e=>{
+const file=e.target.files[0];
+const reader=new FileReader();
+
+reader.onload=function(){
+let photos=JSON.parse(localStorage.getItem("photos")||"[]");
+photos.push(reader.result);
+localStorage.setItem("photos",JSON.stringify(photos));
+loadPhotos();
+}
+reader.readAsDataURL(file);
+});
+
+function loadPhotos(){
+photoGallery.innerHTML="";
+let photos=JSON.parse(localStorage.getItem("photos")||"[]");
+
+photos.forEach(src=>{
+let img=document.createElement("img");
+img.src=src;
+photoGallery.appendChild(img);
+});
+}
+
+loadPhotos();
+
+// video upload
+const videoInput=document.getElementById("videoInput");
+const videoGallery=document.getElementById("videoGallery");
+
+videoInput.addEventListener("change",e=>{
+const file=e.target.files[0];
+const reader=new FileReader();
+
+reader.onload=function(){
+let videos=JSON.parse(localStorage.getItem("videos")||"[]");
+videos.push(reader.result);
+localStorage.setItem("videos",JSON.stringify(videos));
+loadVideos();
+}
+reader.readAsDataURL(file);
+});
+
+function loadVideos(){
+videoGallery.innerHTML="";
+let videos=JSON.parse(localStorage.getItem("videos")||"[]");
+
+videos.forEach(src=>{
+let v=document.createElement("video");
+v.src=src;
+v.controls=true;
+videoGallery.appendChild(v);
+});
+}
+
+loadVideos();
+
+// notes
+function saveNote(){
+const text=document.getElementById("noteText").value;
+if(!text) return;
+
+let notes=JSON.parse(localStorage.getItem("notes")||"[]");
+notes.push(text);
+
+localStorage.setItem("notes",JSON.stringify(notes));
+document.getElementById("noteText").value="";
+loadNotes();
+}
+
+function loadNotes(){
+const box=document.getElementById("notes");
+box.innerHTML="";
+
+let notes=JSON.parse(localStorage.getItem("notes")||"[]");
+
+notes.forEach(n=>{
+let div=document.createElement("div");
+div.className="note";
+div.innerText=n;
+box.appendChild(div);
+});
+}
+
+loadNotes();
+
+</script>
 </body>
 </html>
